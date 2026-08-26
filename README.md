@@ -38,3 +38,15 @@ Open `http://localhost:3000` in your browser.
 ```bash
 npm run build
 ```
+
+## Deploy to Vercel
+
+Import this repository in Vercel and use the automatically detected settings:
+
+- Framework Preset: Next.js
+- Root Directory: `./`
+- Build Command: `npm run build`
+- Output Directory: leave blank (Next.js default)
+- Install Command: `npm install`
+
+The current demo does not require environment variables.
