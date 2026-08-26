@@ -22,3 +22,19 @@ It allows studio executives and creative teams to test camera angles, lighting, 
 2. **Gemini Directs:** Gemini reads the screenplay and generates standalone 3D WebGL code with Three.js for the actors, lighting, environment, and cameras.
 3. **Replit Hosts:** The app sends the generated code to Replit through its API, creating a live web link that users can open and explore in 3D.
 
+## Local Development
+
+Requires Node.js 22.13 or newer.
+
+```bash
+npm install
+npm run dev
+```
+
+Open `http://localhost:3000` in your browser.
+
+## Production Build
+
+```bash
+npm run build
+```
