@@ -21,7 +21,7 @@ export default function SigninPage() {
           <p>Sign in to return to your scenes, shot plans, and shared previews.</p>
         </div>
         <form className="auth-form">
-          <div className="form-heading"><span>Sign in</span><small>Secure access</small></div>
+          <div className="form-heading"><span>Sign in</span></div>
           <label>Email address<input name="email" type="email" autoComplete="email" placeholder="you@studio.com" required /></label>
           <label>Password<input name="password" type="password" autoComplete="current-password" placeholder="Your password" required /></label>
           <Link className="forgot-link" href="/signup">Forgot your password?</Link>
