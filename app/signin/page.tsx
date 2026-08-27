@@ -11,7 +11,6 @@ export default function SigninPage() {
     <main className="auth-page">
       <header className="auth-header">
         <Link className="brand" href="/" aria-label="Temporary Name home">
-          <span className="brand-mark" aria-hidden="true"><span /><span /><span /></span>
           <span>Temporary Name</span>
         </Link>
         <Link className="sign-in" href="/signup">New here? <strong>Get started</strong></Link>

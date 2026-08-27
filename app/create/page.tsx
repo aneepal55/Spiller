@@ -12,7 +12,6 @@ export default function CreatePage() {
     <main className="route-page">
       <header className="site-header">
         <Link className="brand" href="/" aria-label="Temporary Name home">
-          <span className="brand-mark" aria-hidden="true"><span /><span /><span /></span>
           <span>Temporary Name</span>
         </Link>
         <nav className="desktop-nav" aria-label="Create page navigation">

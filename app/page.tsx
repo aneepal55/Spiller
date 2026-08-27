@@ -12,11 +12,6 @@ export default function Home() {
     <main>
       <header className="site-header">
         <Link className="brand" href="#top" aria-label="Temporary Name home">
-          <span className="brand-mark" aria-hidden="true">
-            <span />
-            <span />
-            <span />
-          </span>
           <span>Temporary Name</span>
         </Link>
         <nav className="desktop-nav" aria-label="Main navigation">
@@ -160,10 +155,8 @@ export default function Home() {
 
       <footer>
         <Link className="brand footer-brand" href="#top">
-          <span className="brand-mark" aria-hidden="true"><span /><span /><span /></span>
           <span>Temporary Name</span>
         </Link>
-        <p>Autonomous screenplay-to-3D pre-visualization.</p>
         <div><Link href="#how-it-works">How it works</Link><Link href="/create">Start creating</Link><Link href="/signup">Get started</Link></div>
       </footer>
     </main>
