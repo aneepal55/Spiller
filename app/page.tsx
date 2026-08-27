@@ -39,7 +39,9 @@ export default function Home() {
           </p>
           <div className="hero-actions">
             <Link className="button" href="/create">Start creating <span>→</span></Link>
-            <Link className="text-link" href="#how-it-works"><span className="play">▶</span> See how it works</Link>
+            <Link className="text-link" href="#how-it-works">
+              See how it works <span className="text-link-arrow" aria-hidden="true">↓</span>
+            </Link>
           </div>
         </div>
 
@@ -84,7 +86,7 @@ export default function Home() {
           </p>
         </div>
         <div className="process-grid">
-          <article className="process-card featured-card">
+          <article className="process-card">
             <span className="step-number">01</span>
             <div className="step-icon">TXT</div>
             <h3>Upload your script</h3>

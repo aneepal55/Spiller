@@ -1,6 +1,8 @@
 @import "tailwindcss";
 
 :root {
+  --font-sans: "Manrope Variable", "Segoe UI", sans-serif;
+  --font-display: "Newsreader Variable", Georgia, serif;
   --font-geist-mono: "SFMono-Regular", Consolas, "Liberation Mono", monospace;
   --ink: #f4f4f2;
   --paper: #1b1811;
@@ -18,7 +20,8 @@ body {
   margin: 0;
   background: var(--paper);
   color: var(--ink);
-  font-family: Arial, Helvetica, sans-serif;
+  font-family: var(--font-sans);
+  font-optical-sizing: auto;
 }
 main { width: 100%; margin: 0; background: var(--paper); }
 a { color: inherit; text-decoration: none; }
@@ -56,12 +59,15 @@ a { color: inherit; text-decoration: none; }
 .hero-copy { max-width: 610px; }
 .eyebrow { display: flex; align-items: center; gap: 10px; text-transform: uppercase; letter-spacing: .16em; font-size: 11px; font-weight: 800; color: var(--amber-deep); margin-bottom: 28px; }
 .eyebrow span { display: block; width: 28px; height: 1px; background: var(--amber-deep); }
-h1 { max-width: 620px; margin: 0; font-size: clamp(58px, 6.1vw, 96px); line-height: .92; letter-spacing: -.065em; font-weight: 800; }
-h1 em { color: var(--amber-deep); font-family: Georgia, serif; font-weight: 400; }
+h1, h2 { font-family: var(--font-display); font-optical-sizing: auto; }
+h1 { max-width: 620px; margin: 0; font-size: clamp(58px, 6.1vw, 96px); line-height: .92; letter-spacing: -.045em; font-weight: 520; }
+h1 em { color: var(--amber-deep); font-family: inherit; font-weight: 430; }
 .hero-lede { max-width: 550px; margin: 30px 0 0; color: #d2d1cd; font-size: 18px; line-height: 1.65; }
 .hero-actions { display: flex; align-items: center; gap: 30px; margin-top: 36px; }
-.text-link { display: inline-flex; align-items: center; gap: 11px; font-size: 14px; font-weight: 700; }
-.play { width: 34px; height: 34px; border: 1px solid var(--line); border-radius: 50%; display: grid; place-items: center; font-size: 9px; padding-left: 2px; }
+.text-link { display: inline-flex; align-items: center; gap: 9px; padding-bottom: 4px; border-bottom: 1px solid rgba(244,244,242,.42); font-size: 14px; font-weight: 650; transition: color .2s ease, border-color .2s ease; }
+.text-link:hover { color: var(--amber); border-color: var(--amber); }
+.text-link-arrow { font-size: 17px; line-height: 1; transition: transform .2s ease; }
+.text-link:hover .text-link-arrow { transform: translateY(3px); }
 .scene-shell { min-width: 0; background: #1d1c19; border: 1px solid rgba(255,255,255,.13); border-radius: 10px; overflow: hidden; box-shadow: 0 36px 80px rgba(0,0,0,.44), 0 4px 12px rgba(0,0,0,.25); transform: perspective(1200px) rotateY(-1.5deg) rotateX(1deg); }
 .scene-topbar { height: 48px; padding: 0 16px; display: grid; grid-template-columns: 1fr auto 1fr; align-items: center; color: #aaa69e; font-size: 9px; letter-spacing: .08em; }
 .window-dots { display: flex; gap: 6px; }
@@ -103,14 +109,13 @@ h1 em { color: var(--amber-deep); font-family: Georgia, serif; font-weight: 400;
   padding: 120px 0;
 }
 .section-heading { display: grid; grid-template-columns: 1.1fr .7fr; gap: 80px; align-items: end; margin-bottom: 58px; }
-h2 { margin: 0; max-width: 760px; font-size: clamp(42px, 4.5vw, 70px); line-height: 1; letter-spacing: -.055em; }
+h2 { margin: 0; max-width: 760px; font-size: clamp(42px, 4.5vw, 70px); line-height: 1; letter-spacing: -.035em; font-weight: 520; }
 .section-heading p { max-width: 480px; margin: 0 0 5px; color: var(--muted); font-size: 16px; line-height: 1.7; }
 .process-section .section-heading h2 { color: var(--red); }
 .process-grid { display: grid; grid-template-columns: repeat(4, 1fr); border-top: 1px solid var(--line); border-bottom: 1px solid var(--line); }
 .process-card { min-height: 380px; padding: 26px 28px 30px; border-right: 1px solid var(--line); display: flex; flex-direction: column; position: relative; transition: background .25s ease, transform .25s ease; }
 .process-card:first-child { border-left: 1px solid var(--line); }
 .process-card:hover { background: var(--cream); transform: translateY(-6px); }
-.featured-card { background: rgba(124,10,1,.12); box-shadow: inset 0 3px 0 var(--red); }
 .step-number { color: #8e8b84; font-family: var(--font-geist-mono), monospace; font-size: 11px; }
 .step-icon { width: 52px; height: 52px; margin: 56px 0 30px; display: grid; place-items: center; border: 1px solid var(--line); border-radius: 50%; color: var(--amber-deep); font-family: var(--font-geist-mono), monospace; font-size: 10px; font-weight: 700; letter-spacing: .08em; }
 .process-card h3 { margin: 0 0 15px; color: var(--amber); font-size: 20px; letter-spacing: -.03em; }
