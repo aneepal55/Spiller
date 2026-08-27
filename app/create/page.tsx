@@ -1,6 +1,9 @@
 import type { Metadata } from "next";
 import Link from "next/link";
+import { notFound } from "next/navigation";
 import { SceneDemo } from "../SceneDemo";
+
+const createPageAvailable = false;
 
 export const metadata: Metadata = {
   title: "Create a Scene | Temporary Name",
@@ -8,6 +11,8 @@ export const metadata: Metadata = {
 };
 
 export default function CreatePage() {
+  if (!createPageAvailable) notFound();
+
   return (
     <main className="route-page">
       <header className="site-header">
