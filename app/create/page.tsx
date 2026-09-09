@@ -1,18 +1,13 @@
 import type { Metadata } from "next";
 import Link from "next/link";
-import { notFound } from "next/navigation";
 import { SceneDemo } from "../SceneDemo";
-
-const createPageAvailable = false;
 
 export const metadata: Metadata = {
   title: "Create a Scene | Temporary Name",
-  description: "Turn a screenplay excerpt into an interactive 3D scene.",
+  description: "Use Gemini, Google Cloud Agent Builder, and Replit MCP to turn a screenplay into an interactive 3D blockout.",
 };
 
 export default function CreatePage() {
-  if (!createPageAvailable) notFound();
-
   return (
     <main className="route-page">
       <header className="site-header">
@@ -24,15 +19,14 @@ export default function CreatePage() {
           <Link href="/#showcase">Showcase</Link>
         </nav>
         <div className="header-actions">
-          <Link className="sign-in" href="/">← Back home</Link>
-          <Link className="button button-small" href="/signup">Get started</Link>
+          <Link className="text-link" href="/">Back to home</Link>
         </div>
       </header>
 
       <section className="create-section route-create">
         <div className="create-intro">
-          <h1 className="route-title">From first draft to first shot.</h1>
-          <p>Paste a short scene, choose a visual direction, and build the foundation of your 3D set.</p>
+          <h1 className="route-title">Your script, in three dimensions.</h1>
+          <p>Let a Gemini-powered Google ADK agent stage your screenplay, explore the Three.js blockout, then share it through Replit MCP.</p>
         </div>
         <SceneDemo />
       </section>

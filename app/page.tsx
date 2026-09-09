@@ -33,7 +33,7 @@ export default function Home() {
             with cameras, lighting, and staging, in under 60 seconds.
           </p>
           <div className="hero-actions">
-            <span className="button button-disabled" aria-disabled="true">Creating coming soon</span>
+            <Link className="button" href="/create">Explore the 3D demo</Link>
             <Link className="text-link" href="#how-it-works">
               See how it works <span className="text-link-arrow" aria-hidden="true">↓</span>
             </Link>
@@ -68,19 +68,19 @@ export default function Home() {
             <small>Screenplay input</small>
           </article>
           <article className="process-card">
-            <h3>AI builds the scene</h3>
-            <p>Gemini translates the scene into production-ready Three.js code, arranging actors, props, and spatial relationships.</p>
-            <small>Scene direction</small>
+            <h3>Gemini directs</h3>
+            <p>A Google Cloud Agent Builder agent turns the script into a structured plan for actors, props, scale, lighting, and spatial relationships.</p>
+            <small>Gemini + Google ADK</small>
           </article>
           <article className="process-card">
-            <h3>Plan cameras & lighting</h3>
-            <p>Explore suggested lenses, framing, camera positions, and practical lighting setups tailored to the action.</p>
-            <small>Shot planning</small>
+            <h3>Explore the blockout</h3>
+            <p>Three.js renders the validated plan so you can orbit, zoom, and compare wide, close, and overhead camera setups.</p>
+            <small>Interactive 3D preview</small>
           </article>
           <article className="process-card">
-            <h3>Explore the scene</h3>
-            <p>Open a live Replit link on any device. Orbit, reposition, compare setups, and share the vision with your team.</p>
-            <small>Interactive preview</small>
+            <h3>Share through Replit</h3>
+            <p>After you approve the scene, a second Gemini agent can use Replit MCP to create a separate, shareable 3D app.</p>
+            <small>Replit partner workflow</small>
           </article>
         </div>
       </section>
@@ -130,7 +130,7 @@ export default function Home() {
         <Link className="brand footer-brand" href="#top">
           <span>Temporary Name</span>
         </Link>
-        <div><Link href="#how-it-works">How it works</Link><span className="footer-disabled">Creating coming soon</span><Link href="/signup">Get started</Link></div>
+        <div><Link href="#how-it-works">How it works</Link><Link href="/create">Explore the 3D demo</Link><Link href="/signup">Get started</Link></div>
       </footer>
     </main>
   );

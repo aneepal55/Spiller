@@ -235,3 +235,9 @@ footer a:hover { color: var(--amber-deep); }
   html { scroll-behavior: auto; }
   *, *::before, *::after { transition-duration: .01ms !important; }
 }
+
+/* Keep the workspace introduction compact so input and preview stay in view. */
+.route-create { padding-top: 40px; padding-bottom: 64px; }
+.route-create .create-intro { display: block; margin-bottom: 28px; }
+.route-create .route-title { font-size: clamp(36px, 4vw, 54px); line-height: 1.1; }
+.route-create .create-intro p { max-width: 720px; margin-top: 12px; font-size: 14px; line-height: 1.7; }

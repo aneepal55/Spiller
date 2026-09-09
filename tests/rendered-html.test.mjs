@@ -39,5 +39,19 @@ test("the prerendered home page contains the cinema experience", async () => {
 
   assert.match(html, /Turn scripts into/);
   assert.match(html, /Interactive 3D scene preview/);
-  assert.match(html, /Start creating/);
+  assert.match(html, /Explore the 3D demo/);
+  assert.match(html, /Google Cloud Agent Builder/);
+  assert.match(html, /Replit MCP/);
+  assert.match(html, /href="\/create"/);
+});
+
+
+test("the create route serves the local screenplay generator", async () => {
+  const html = await readFile(new URL(".next/server/app/create.html", projectRoot), "utf8");
+  assert.match(html, /Your screenplay/);
+  assert.match(html, /Camera viewpoints/);
+  assert.match(html, /No billing is needed/);
+  assert.match(html, /Generate with Gemini/);
+  assert.match(html, /REPLIT MCP/);
+  assert.match(html, /Detected in this scene/);
 });
