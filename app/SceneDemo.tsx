@@ -191,7 +191,7 @@ export function SceneDemo() {
           {inputError && <p role="alert" className={styles["input-error"]}>{inputError}</p>}
         </form>
         {script !== generatedScript && <p className={styles["sample-note"]} role="status">Script changed. Generate again to update the preview.</p>}
-        <p className={styles["local-note"]}>{aiConfigured ? "Google ADK runs locally and sends this scene to Gemini. Nothing is deployed to a paid Cloud runtime." : "No billing is needed. Use a Google AI Studio project marked Free and do not connect a billing account."}</p>
+        <p className={styles["local-note"]}>{aiConfigured ? "Google ADK runs locally and sends this scene to Gemini." : "No billing is needed. Use a Google AI Studio project marked Free and do not connect a billing account."}</p>
       </aside>
       <section className={styles["viewer-panel"]} aria-label="Interactive scene preview">
         <div className={styles["viewer-heading"]}><div><span className={styles["eyebrow"]}>02 / YOUR PREVIEW</span><h2>Explore the scene.</h2></div><span className={styles["preview-badge"]}>{script !== generatedScript ? "Changes pending" : source === "gemini" ? "Gemini generated" : "Local preview"}</span></div>

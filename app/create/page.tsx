@@ -3,7 +3,7 @@ import Link from "next/link";
 import { SceneDemo } from "../SceneDemo";
 
 export const metadata: Metadata = {
-  title: "Create a Scene | Temporary Name",
+  title: "Create a Scene | Spiller",
   description: "Use Gemini and Google Cloud Agent Builder to turn a screenplay into an interactive 3D blockout.",
 };
 
@@ -11,8 +11,8 @@ export default function CreatePage() {
   return (
     <main className="route-page">
       <header className="site-header">
-        <Link className="brand" href="/" aria-label="Temporary Name home">
-          <span>Temporary Name</span>
+        <Link className="brand" href="/" aria-label="Spiller home">
+          <span>Spiller</span>
         </Link>
         <nav className="desktop-nav" aria-label="Create page navigation">
           <Link href="/#how-it-works">How it works</Link>

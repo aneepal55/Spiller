@@ -2,7 +2,7 @@ import type { Metadata } from "next";
 import Link from "next/link";
 
 export const metadata: Metadata = {
-  title: "Get Started | Temporary Name",
+  title: "Get Started | Spiller",
   description: "Create an account and start turning scripts into 3D scenes.",
 };
 
@@ -10,8 +10,8 @@ export default function SignupPage() {
   return (
     <main className="auth-page">
       <header className="auth-header">
-        <Link className="brand" href="/" aria-label="Temporary Name home">
-          <span>Temporary Name</span>
+        <Link className="brand" href="/" aria-label="Spiller home">
+          <span>Spiller</span>
         </Link>
         <Link className="sign-in" href="/signin">Already have an account? <strong>Sign in</strong></Link>
       </header>

@@ -2,7 +2,7 @@ import type { Metadata } from "next";
 import Link from "next/link";
 
 export const metadata: Metadata = {
-  title: "Temporary Name | Turn Scripts Into Scenes",
+  title: "Spiller | Turn Scripts Into Scenes",
   description:
     "Transform screenplay pages into interactive 3D pre-visualizations in under 60 seconds.",
 };
@@ -11,8 +11,8 @@ export default function Home() {
   return (
     <main>
       <header className="site-header">
-        <Link className="brand" href="#top" aria-label="Temporary Name home">
-          <span>Temporary Name</span>
+        <Link className="brand" href="#top" aria-label="Spiller home">
+          <span>Spiller</span>
         </Link>
         <nav className="desktop-nav" aria-label="Main navigation">
           <Link href="#how-it-works">How it works</Link>
@@ -57,7 +57,7 @@ export default function Home() {
             <h2>Three steps. One living scene.</h2>
           </div>
           <p>
-            Temporary Name handles the technical translation so your team can stay
+            Spiller handles the technical translation so your team can stay
             focused on the story, the shot, and the feeling.
           </p>
         </div>
@@ -123,7 +123,7 @@ export default function Home() {
 
       <footer>
         <Link className="brand footer-brand" href="#top">
-          <span>Temporary Name</span>
+          <span>Spiller</span>
         </Link>
         <div><Link href="#how-it-works">How it works</Link><Link href="/create">Explore the 3D demo</Link><Link href="/signup">Get started</Link></div>
       </footer>
