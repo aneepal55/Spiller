@@ -54,7 +54,7 @@ export default function Home() {
       <section className="process-section" id="how-it-works">
         <div className="section-heading">
           <div>
-            <h2>Four steps. One living scene.</h2>
+            <h2>Three steps. One living scene.</h2>
           </div>
           <p>
             Temporary Name handles the technical translation so your team can stay
@@ -76,11 +76,6 @@ export default function Home() {
             <h3>Explore the blockout</h3>
             <p>Three.js renders the validated plan so you can orbit, zoom, and compare wide, close, and overhead camera setups.</p>
             <small>Interactive 3D preview</small>
-          </article>
-          <article className="process-card">
-            <h3>Share through Replit</h3>
-            <p>After you approve the scene, a second Gemini agent can use Replit MCP to create a separate, shareable 3D app.</p>
-            <small>Replit partner workflow</small>
           </article>
         </div>
       </section>

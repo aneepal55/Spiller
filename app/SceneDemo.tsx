@@ -17,13 +17,8 @@ export function SceneDemo() {
   const [inputError, setInputError] = useState("");
   const [isGenerating, setIsGenerating] = useState(false);
   const [aiConfigured, setAiConfigured] = useState<boolean | null>(null);
-  const [replitConfigured, setReplitConfigured] = useState(false);
   const [model, setModel] = useState("gemini-3.7-flash");
   const [source, setSource] = useState<"gemini" | "local">("local");
-  const [showPublishConfirm, setShowPublishConfirm] = useState(false);
-  const [isPublishing, setIsPublishing] = useState(false);
-  const [publishError, setPublishError] = useState("");
-  const [replUrl, setReplUrl] = useState("");
   const container = useRef<HTMLDivElement>(null);
   const viewer = useRef<Viewer | null>(null);
   const [status, setStatus] = useState("Loading 3D preview…");
@@ -33,11 +28,10 @@ export function SceneDemo() {
   useEffect(() => {
     let active = true;
     fetch("/api/generate-scene")
-      .then(async (response) => response.json() as Promise<{ configured?: boolean; model?: string; replitMcpConfigured?: boolean }>)
+      .then(async (response) => response.json() as Promise<{ configured?: boolean; model?: string }>)
       .then((data) => {
         if (!active) return;
         setAiConfigured(Boolean(data.configured));
-        setReplitConfigured(Boolean(data.replitMcpConfigured));
         if (data.model) setModel(data.model);
       })
       .catch(() => { if (active) setAiConfigured(false); });
@@ -58,6 +52,8 @@ export function SceneDemo() {
     renderer.shadowMap.enabled = true;
     renderer.shadowMap.type = THREE.PCFShadowMap;
     renderer.toneMapping = THREE.ACESFilmicToneMapping;
+    renderer.toneMappingExposure = 1.08;
+    renderer.outputColorSpace = THREE.SRGBColorSpace;
     renderer.domElement.setAttribute("aria-label", `3D preview of ${description.title}, with ${description.objects.length} objects`);
     renderer.domElement.setAttribute("role", "img");
     host.appendChild(renderer.domElement);
@@ -133,9 +129,6 @@ export function SceneDemo() {
     setSource(nextSource);
     setActiveShot("wide");
     setInputError("");
-    setShowPublishConfirm(false);
-    setPublishError("");
-    setReplUrl("");
   }
 
   function generateLocally() {
@@ -165,27 +158,6 @@ export function SceneDemo() {
       setInputError(error instanceof Error ? error.message : "Gemini could not generate this scene.");
     } finally {
       setIsGenerating(false);
-    }
-  }
-
-  async function publishToReplit() {
-    if (!replitConfigured || isPublishing || script !== generatedScript) return;
-    setIsPublishing(true);
-    setPublishError("");
-    try {
-      const response = await fetch("/api/replit", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ confirmed: true, scene: description, screenplay: generatedScript }),
-      });
-      const data = await response.json() as { replUrl?: string; error?: string };
-      if (!response.ok || !data.replUrl) throw new Error(data.error || "Replit MCP could not create the app.");
-      setReplUrl(data.replUrl);
-      setShowPublishConfirm(false);
-    } catch (error) {
-      setPublishError(error instanceof Error ? error.message : "Replit MCP could not create the app.");
-    } finally {
-      setIsPublishing(false);
     }
   }
 
@@ -243,19 +215,6 @@ export function SceneDemo() {
           {!description.objects.length && <p>No supported objects found. Add a character action or a supported prop to your script.</p>}
           <ul className={styles["detected-objects"]}>{description.objects.map((object) => <li key={object.id}>{object.name} <small>({object.kind})</small></li>)}</ul>
           <details><summary>How this preview was interpreted</summary><p>{source === "gemini" ? "A Google ADK agent used Gemini to interpret the script; Three.js rendered its validated scene plan." : "The basic local fallback used keyword matching and automatic placement."}</p><ul>{description.notes.map((note) => <li key={note}>{note}</li>)}</ul></details>
-          <div className={styles["replit-handoff"]}>
-            <div>
-              <span className={styles["eyebrow"]}>03 / REPLIT MCP</span>
-              <h3>Create a shareable 3D app.</h3>
-              <p>A second Gemini agent can send the approved scene plan to Replit&apos;s official MCP server.</p>
-            </div>
-            <span className={styles["integration-state"]} data-configured={replitConfigured}>{replitConfigured ? "Connected" : "Not connected"}</span>
-            {!replitConfigured && <p className={styles["integration-help"]}>Add a Replit OAuth access token as <code>REPLIT_MCP_ACCESS_TOKEN</code>. The preview still works without it.</p>}
-            {replitConfigured && !showPublishConfirm && !replUrl && <button className={styles["replit-button"]} type="button" disabled={script !== generatedScript} onClick={() => setShowPublishConfirm(true)}>Create app on Replit</button>}
-            {showPublishConfirm && <div className={styles["publish-confirm"]} role="group" aria-label="Confirm Replit app creation"><p>This creates one app in your Replit account and sends the current script and scene plan to Replit. It uses your available free Replit allowance.</p><div><button className={styles["replit-button"]} type="button" disabled={isPublishing} onClick={() => void publishToReplit()}>{isPublishing ? "Replit Agent is building…" : "Confirm and create"}</button><button type="button" disabled={isPublishing} onClick={() => setShowPublishConfirm(false)}>Cancel</button></div></div>}
-            {replUrl && <a className={styles["replit-result"]} href={replUrl} target="_blank" rel="noreferrer">Open the generated Replit app <span aria-hidden="true">↗</span></a>}
-            {publishError && <p role="alert" className={styles["input-error"]}>{publishError}</p>}
-          </div>
         </div>
       </section>
     </div>

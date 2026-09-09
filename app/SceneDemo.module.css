@@ -58,21 +58,6 @@
 .scene-summary summary { cursor: pointer; font-size: 12px; color: #d9c397; }
 .scene-summary ul:not(.detected-objects) { padding-left: 20px; margin: 12px 0 0; list-style: disc; }
 .scene-summary li + li { margin-top: 0; }
-.replit-handoff { display: grid; grid-template-columns: minmax(0, 1fr) auto; gap: 14px 20px; align-items: start; margin-top: 20px; padding: 20px; border: 1px solid #554a39; border-radius: 8px; background: #1d1b17; }
-.replit-handoff .eyebrow { margin-bottom: 6px; }
-.replit-handoff h3 { margin: 0; color: #eeeae1; font-size: 14px; }
-.replit-handoff p { margin: 6px 0 0; color: #bfb7aa; line-height: 1.65; }
-.integration-state { padding: 5px 9px; border: 1px solid #65563d; border-radius: 20px; background: #302a20; color: #d8c18d; font-size: 10px; }
-.integration-state[data-configured="true"] { border-color: #526c50; background: #222b21; color: #a9d3a5; }
-.integration-help, .publish-confirm, .replit-button, .replit-result, .replit-handoff > .input-error { grid-column: 1 / -1; }
-.integration-help code { color: #e7d3a9; overflow-wrap: anywhere; }
-.replit-button { justify-self: start; min-height: 40px; padding: 9px 14px; border: 1px solid #ddd5ca; border-radius: 6px; background: #eeeae1; color: #211f1a; font: 700 12px var(--font-sans); cursor: pointer; }
-.replit-button:hover { background: #fffaf0; }
-.publish-confirm { padding-top: 14px; border-top: 1px solid #494238; }
-.publish-confirm > p { margin-top: 0; }
-.publish-confirm > div { display: flex; flex-wrap: wrap; gap: 8px; margin-top: 12px; }
-.publish-confirm > div > button:last-child { min-height: 40px; padding: 9px 14px; border: 1px solid #575044; border-radius: 6px; background: transparent; color: #ddd5c8; font: 12px var(--font-sans); cursor: pointer; }
-.replit-result { display: inline-flex; justify-self: start; color: #d9c17f; font-weight: 700; text-underline-offset: 3px; }
 .scene-workspace :is(button, textarea, summary):focus-visible { outline: 2px solid #e3b345; outline-offset: 3px; }
 @media (max-width: 1050px) {
   .scene-workspace { grid-template-columns: minmax(300px, 350px) minmax(0, 1fr); gap: 16px; }
@@ -92,6 +77,4 @@
   .scene-workspace h2 { font-size: 21px; }
   .three-viewport { height: 300px; }
   .preview-badge { display: none; }
-  .replit-handoff { grid-template-columns: minmax(0, 1fr); padding: 16px; }
-  .integration-state { justify-self: start; }
 }

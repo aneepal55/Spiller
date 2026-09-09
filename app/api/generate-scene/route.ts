@@ -15,7 +15,6 @@ export function GET() {
     model: FREE_GEMINI_MODEL,
     framework: AGENT_FRAMEWORK,
     agentBuilder: true,
-    replitMcpConfigured: Boolean(process.env.REPLIT_MCP_ACCESS_TOKEN?.trim()),
     tier: "free",
   });
 }

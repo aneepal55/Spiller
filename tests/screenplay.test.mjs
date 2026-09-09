@@ -3,7 +3,6 @@ import test from "node:test";
 import { normalizeSceneDescription, parseScreenplay, samples, MAX_SCRIPT_LENGTH } from "../app/scene/screenplay.ts";
 import { buildScene, shotsForScene, disposeScene } from "../app/scene/desert-scene.ts";
 import { AGENT_FRAMEWORK, FREE_GEMINI_MODEL, rootAgent, sceneResponseSchema } from "../app/scene/gemini.ts";
-import { buildReplitAppPrompt, REPLIT_MCP_TOOLS, REPLIT_MCP_URL } from "../app/agent/replit.ts";
 
 const kinds = (scene, kind) => scene.objects.filter((object) => object.kind === kind);
 
@@ -93,6 +92,54 @@ test("Gemini scene data is validated before reaching the renderer", () => {
   assert.deepEqual(normalizeSceneDescription(scene), scene);
 });
 
+test("classroom boards are recognized and mounted on the front wall", () => {
+  const scene = normalizeSceneDescription({
+    title: "INT. CLASSROOM - NIGHT",
+    environment: "room",
+    road: false,
+    lighting: "night",
+    objects: [{
+      id: "message",
+      kind: "prop",
+      name: "Blackboard",
+      shape: "box",
+      position: [20, 0, 4],
+      size: [4.5, 1.5, 0.12],
+      rotationY: 0,
+      color: "#17251e",
+      description: "A message appears on the blackboard",
+    }],
+    notes: [],
+  });
+  assert.equal(scene.objects[0].kind, "board");
+  assert.deepEqual(scene.objects[0].position, [6, 1.8, -8.85]);
+  const rendered = buildScene(scene).children.find((object) => object.userData.id === "message");
+  assert.equal(rendered.children.length, 5);
+});
+
+test("rooftop action preserves airborne props, attachments, and character pose", () => {
+  const scene = normalizeSceneDescription({
+    title: "EXT. ROOFTOP - SUNSET",
+    environment: "rooftop",
+    road: false,
+    lighting: "sunset",
+    objects: [
+      { id: "leo", kind: "person", name: "Leo", shape: "cylinder", position: [0, 0, 1], size: [0.7, 1.8, 0.7], rotationY: 0, color: "#334455", placement: "floor", pose: "reaching", attachedTo: "", description: "Leo reaches toward the balloon." },
+      { id: "balloon", kind: "balloon", name: "Red balloon", shape: "sphere", position: [0.8, 2.5, 0.5], size: [0.45, 0.6, 0.45], rotationY: 0, color: "#cc332b", placement: "airborne", pose: "neutral", attachedTo: "", description: "A balloon rising beside Leo." },
+      { id: "message", kind: "paper", name: "Tied message", shape: "box", position: [0.8, 1.55, 0.5], size: [0.25, 0.16, 0.02], rotationY: 0, color: "#eee5cf", placement: "airborne", pose: "neutral", attachedTo: "balloon", description: "A message tied to the string." },
+    ],
+    notes: [],
+  });
+  assert.equal(scene.environment, "rooftop");
+  assert.equal(scene.objects[0].pose, "reaching");
+  assert.equal(scene.objects[1].placement, "airborne");
+  assert.equal(scene.objects[2].attachedTo, "balloon");
+  const rendered = buildScene(scene);
+  assert.ok(rendered.children.find((object) => object.userData.id === "balloon")?.children.length >= 2);
+  assert.ok(rendered.children.length > scene.objects.length + 10, "rooftop architecture and skyline should be automatic");
+  disposeScene(rendered);
+});
+
 test("the screenplay workflow is a Gemini-powered Google ADK agent", () => {
   assert.equal(rootAgent.name, "cinema_previs_agent");
   assert.equal(rootAgent.model, FREE_GEMINI_MODEL);
@@ -105,14 +152,4 @@ test("the screenplay workflow is a Gemini-powered Google ADK agent", () => {
     notes: [],
   }).success);
   assert.match(AGENT_FRAMEWORK, /Google Cloud Agent Builder/);
-});
-
-test("the Replit partner handoff uses the official MCP server and a 3D game request", () => {
-  const scene = parseScreenplay(samples.park);
-  const prompt = buildReplitAppPrompt(scene, samples.park);
-  assert.equal(REPLIT_MCP_URL, "https://replit-mcp.com/server/mcp");
-  assert.ok(REPLIT_MCP_TOOLS.includes("create_app_from_prompt"));
-  assert.match(prompt, /replit_create_app_from_prompt exactly once/);
-  assert.match(prompt, /app_stack "3d_game"/);
-  assert.match(prompt, /Do not add paid APIs/);
 });

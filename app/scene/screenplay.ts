@@ -1,15 +1,20 @@
 export const objectKinds = [
   "person", "car", "table", "chair", "tree", "bed", "sofa", "lamp",
-  "door", "window", "building", "rock", "prop",
+  "door", "window", "board", "building", "rock", "balloon", "paper",
+  "railing", "prop",
 ] as const;
 export const shapes = ["box", "sphere", "cylinder", "cone"] as const;
-export const environments = ["desert", "park", "room", "street", "forest", "beach", "city", "open"] as const;
+export const environments = ["desert", "park", "room", "rooftop", "street", "forest", "beach", "city", "open"] as const;
 export const lightingModes = ["day", "sunset", "night", "indoor"] as const;
+export const placements = ["floor", "wall", "airborne", "background"] as const;
+export const poses = ["neutral", "walking", "reaching", "sitting"] as const;
 
 export type ObjectKind = (typeof objectKinds)[number];
 export type Shape = (typeof shapes)[number];
 export type Environment = (typeof environments)[number];
 export type Lighting = (typeof lightingModes)[number];
+export type Placement = (typeof placements)[number];
+export type Pose = (typeof poses)[number];
 export type Vector3Tuple = [number, number, number];
 
 export type SceneObject = {
@@ -21,6 +26,9 @@ export type SceneObject = {
   size: Vector3Tuple;
   rotationY: number;
   color: string;
+  placement: Placement;
+  pose: Pose;
+  attachedTo: string;
   description: string;
 };
 
@@ -56,8 +64,12 @@ const defaults: Record<ObjectKind, { shape: Shape; size: Vector3Tuple; color: st
   lamp: { shape: "cone", size: [0.8, 2.1, 0.8], color: "#d9b56f" },
   door: { shape: "box", size: [1, 2.2, 0.15], color: "#725139" },
   window: { shape: "box", size: [1.8, 1.4, 0.1], color: "#8fc1d7" },
+  board: { shape: "box", size: [4.5, 1.5, 0.12], color: "#26352d" },
   building: { shape: "box", size: [6, 5, 5], color: "#989081" },
   rock: { shape: "sphere", size: [1.2, 0.7, 1], color: "#786f63" },
+  balloon: { shape: "sphere", size: [0.45, 0.6, 0.45], color: "#bd332b" },
+  paper: { shape: "box", size: [0.25, 0.16, 0.01], color: "#eee5cf" },
+  railing: { shape: "box", size: [5, 1.1, 0.12], color: "#77756f" },
   prop: { shape: "box", size: [1, 1, 1], color: "#a58a68" },
 };
 
@@ -94,21 +106,41 @@ export function normalizeSceneDescription(value: unknown): SceneDescription {
   const ids = new Set<string>();
   const objects = rawObjects.flatMap((raw, index): SceneObject[] => {
     if (!isRecord(raw)) return [];
-    const kind = enumValue(raw.kind, objectKinds, "prop");
+    let kind = enumValue(raw.kind, objectKinds, "prop");
+    const semanticName = `${typeof raw.name === "string" ? raw.name : ""} ${typeof raw.description === "string" ? raw.description : ""}`;
+    // Repair common semantic misses in older or imperfect model responses so
+    // recognizable story props do not collapse into anonymous boxes.
+    if (kind === "prop" && /\b(?:chalk|white|black)?board\b/i.test(semanticName)) kind = "board";
+    if (kind === "prop" && /\bballoon\b/i.test(semanticName)) kind = "balloon";
+    if (kind === "prop" && /\b(?:note|message|letter|paper)\b/i.test(semanticName)) kind = "paper";
+    if (kind === "prop" && /\b(?:railing|guardrail|balustrade)\b/i.test(semanticName)) kind = "railing";
     const preset = defaults[kind];
     let id = cleanText(raw.id, `${kind}-${index + 1}`, 50).replace(/[^a-zA-Z0-9_-]/g, "-");
     while (ids.has(id)) id = `${id}-${index + 1}`;
     ids.add(id);
     const color = typeof raw.color === "string" && /^#[0-9a-f]{6}$/i.test(raw.color) ? raw.color : preset.color;
+    const defaultPlacement: Placement = kind === "board" || kind === "window" ? "wall"
+      : kind === "balloon" ? "airborne" : kind === "building" ? "background" : "floor";
+    const suppliedPosition = vector(raw.position, [((index % 5) - 2) * 2.5, 0, Math.floor(index / 5) * 3], -25, 25);
+    const position: Vector3Tuple = kind === "board" && environment === "room"
+      ? [clamp(suppliedPosition[0], -6, 6), 1.8, -8.85]
+      : kind === "building" && environment === "rooftop"
+        ? [clamp(suppliedPosition[0], -20, 20), 0, Math.min(-13, suppliedPosition[2])]
+        : kind === "balloon" && suppliedPosition[1] < 1.2
+          ? [suppliedPosition[0], 2.4, suppliedPosition[2]]
+          : suppliedPosition;
     return [{
       id,
       kind,
       name: cleanText(raw.name, `${kind} ${index + 1}`, 70),
       shape: enumValue(raw.shape, shapes, preset.shape),
-      position: vector(raw.position, [((index % 5) - 2) * 2.5, 0, Math.floor(index / 5) * 3], -25, 25),
+      position,
       size: vector(raw.size, preset.size, 0.15, 15),
       rotationY: clamp(typeof raw.rotationY === "number" && Number.isFinite(raw.rotationY) ? raw.rotationY : 0, -6.3, 6.3),
       color,
+      placement: kind === "board" ? "wall" : kind === "balloon" ? "airborne" : enumValue(raw.placement, placements, defaultPlacement),
+      pose: enumValue(raw.pose, poses, "neutral"),
+      attachedTo: cleanText(raw.attachedTo, "", 50).replace(/[^a-zA-Z0-9_-]/g, "-"),
       description: cleanText(raw.description, "", 180),
     }];
   });
@@ -151,6 +183,7 @@ export function parseScreenplay(input: string): SceneDescription {
   }
   const text = `${heading === "Untitled scene" ? "" : heading}\n${action.join("\n")}`;
   const environment: Environment = /^INT\b/i.test(heading) || /\b(room|kitchen|office|bedroom|apartment|cafe)\b/i.test(text) ? "room"
+    : /\brooftop\b/i.test(text) ? "rooftop"
     : /\b(desert|dunes?)\b/i.test(text) ? "desert"
     : /\b(forest|woods)\b/i.test(text) ? "forest"
     : /\b(park|garden)\b/i.test(text) ? "park"
@@ -176,7 +209,7 @@ export function parseScreenplay(input: string): SceneDescription {
     }
     return Math.min(count, 8);
   }
-  for (const kind of ["car", "table", "chair", "tree", "bed", "sofa", "lamp", "door", "window", "rock"] as const) {
+  for (const kind of ["car", "table", "chair", "tree", "bed", "sofa", "lamp", "door", "window", "board", "rock", "balloon", "railing"] as const) {
     for (let i = 0; i < countObjects(kind); i++) rawObjects.push({ kind, name: `${kind} ${i + 1}` });
   }
   const genericPeople = countObjects("person|character|man|woman") || (/\b(people|men|women)\b/i.test(text) ? 2 : 0);
