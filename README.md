@@ -1,4 +1,4 @@
-# ScriptStage — AI screenplay-to-3D previsualization
+# *Spiller* — AI screenplay-to-3D previsualization
 
 ## Overview
 
